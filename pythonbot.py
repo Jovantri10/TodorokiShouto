@@ -72,7 +72,7 @@ client = commands.Bot(
   command_prefix=[
         "Todo.",
         'todo.',
-        ',,,.',
+        't,',
         'ts',
         "<@714330708365148190> ",
     ],
