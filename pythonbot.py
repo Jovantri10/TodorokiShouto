@@ -1,13 +1,20 @@
 import discord
-import ast
+import discordgames as Games
+import client
+import canvas as Painter
 import asyncio
+from discord import client
 import json
 import datetime
 import logging
+from utils import has_voted
 from bs4 import BeautifulSoup
 import urllib.request
+import requests
 import re
 import os
+from datetime import datetime as todoroki
+from discord.utils import get
 from boto.s3.connection import S3Connection
 import re
 import datetime, time
@@ -22,8 +29,7 @@ from discord.utils import get
 from random import randint
 import datetime
 import sys
-import os
-from discord.ext.commands import (Bot, BotMissingPermissions, bot_has_permissions)
+from discord.ext.commands import (Bot,BotMissingPermissions,bot_has_permissions)
 from discord import *
 import pprint
 import random
@@ -39,6 +45,8 @@ import sys
 import subprocess
 import ast
 import json
+import udpy
+from udpy import UrbanClient
 import praw
 import traceback
 import platform
@@ -52,158 +60,82 @@ import signal
 import sys
 import urllib.parse
 import datetime
-
 from PIL import Image
 import requests
-      
+import deku as todo
+import statcord
+from deku import *
 
 
 client = discord.Client
 client = commands.Bot(
-    command_prefix=[
-        "Van ",
+  command_prefix=[
+        "Todo.",
+        'todo.',
+        ',,,.',
+        'ts',
+        "<@714330708365148190> ",
     ],
-    owner_id=552492140270452736,
-    status=discord.Status.idle,
-    activity=discord.Activity(
-        type=discord.ActivityType.playing,
-        name=f"With Thomas Brodie |Tetsurou help",
-        url="https://www.twitch.tv/pkidz2123"))  #Set the command prefix to what you prefer
-        
+    owner_id=552492140270452736)
+    #Set the command prefix to what you preferrint(f'Logged in as {bot.user.name} - {bot.user.id}')
+
 bot = client
+todoroki = bot
 async def statuschange():
 	while not client.is_closed():
 		await bot.wait_until_ready(
 		)  # Makes the bot wait until it's fully ready before the stuff below are ran
 		await bot.change_presence(
+		    status=discord.Status.idle,
 		    activity=discord.Activity(
 		        type=discord.ActivityType.watching,
-		        name=f"{len(bot.guilds)} Guild's | Find bug? Dm owner!",
-		        url="https://www.twitch.tv/pkidz2123")
-		)  
-		await asyncio.sleep(15)  # Makes it wait another 8 seconds and then it'll go back to the top on playing because we used "while" which makes it look
-		await bot.change_presence(
-		    activity=discord.Activity(
-		        type=discord.ActivityType.watching,
-		        name=f"Owner: Minho Newt Uwu#2144",
-		        url="https://www.twitch.tv/pkidz2123")
-		)  
-		await asyncio.sleep(15) 
-		await bot.change_presence(
-		    activity=discord.Activity(
-		        type=discord.ActivityType.streaming,
-		        name=f"With Thomas Brodie | Py!help",
+		        name=f"{len(bot.guilds)} Guild's | Find bug? Todo.bug",
 		        url="https://www.twitch.tv/pkidz2123"))
-		await asyncio.sleep(15)
+		await asyncio.sleep(
+		    8
+		)  # Makes it wait another 8 seconds and then it'll go back to the top on playing because we used "while" which makes it look
+		await bot.change_presence(
+		    status=discord.Status.idle,
+		    activity=discord.Activity(
+		        type=discord.ActivityType.listening,
+		        name=f"Todoroki and Deku | Todo.help",
+		        url="https://www.twitch.tv/pkidz2123"))
+		await asyncio.sleep(8)
 
-async def on_ready():
-    print(f'Logged in as {bot.user.name} - {bot.user.id}')
-    for Cogs in Cogs:
-        bot.load_extension(Cogs)
-    return
-
-
-extensions = ['Cogs.user','Cogs.Search','Cogs.commands','Cogs.Encoding','Cogs.misc commands', 'Cogs.membercount','Cogs.Members','Cogs.utility','Cogs.Owner']
+extensions = ['Cogs.vaan','Cogs.commands','Cogs.api','Cogs.utils','Cogs.ownerr','Cogs.helpo','Cogs.util','Cogs.stuff','Cogs.jishaku','Cogs.ksoft','Cogs.mod','Cogs.warn','Cogs.afk','Cogs.snipe','Cogs.images','Cogs.user','Cogs.Encoding','Cogs.misc commands','Cogs.membercount','Cogs.Members','Cogs.Owner']
 
 if __name__ == '__main__':
-    for extension in extensions:
-        client.load_extension(extension)
-
-playingBlackJack = False
-dealerValue = 0
-playerValue = 0
-dealerCards = []
-playerCards = []
-dealerNumAces = 0
-playerNumAces = 0
-cardNames = {1: 'One', 2: 'Two', 3: 'Three', 4: 'Four', 5: 'Five', 6: 'Six', 7: 'Seven', 8: 'Eight', 9: 'Nine',
-             10: 'Ten', 11: 'Jack', 12: 'Queen', 13: 'King', 14: 'Ace'}
-cardValues = {1: 1, 2: 2, 3: 3, 4: 4, 5: 5, 6: 6, 7: 7, 8: 8, 9: 9, 10: 10, 11: 10, 12: 10, 13: 10, 14: 11}
-
-# Rock paper scissors variables (1 == rock, 2 == paper, 3 == scissors)
-playingRPS = False
-aiChoice = 0
-playerChoice = 0
-aiPoints = 0
-playerPoints = 0
-
-# Riddle variables
-answering = False
-riddle = ""
-riddleAnswer = ""
-riddleLine = 0
-riddleGuessesLeft = 3
-prevRiddleLine = 0
-
-# Good Morning variable
-gmOptionEnabled = False
+	for extension in extensions:
+		client.load_extension(extension)
 
 @bot.event
 async def on_ready():
-    print('Logged in as')
-    print(bot.user.name)
-    print(bot.user.id)
-    print('------')
-    
+	replit.clear()
+	print(f'Logged in as {bot.user.name} - {bot.user.id}')
+	bot.remove_command('help')
 
-bot.remove_command('help')
+@bot.event
+async def on_command_error(ctx, error):
+  if isinstance(error, commands.CheckAnyFailure):
+    await ctx.send(f'Hm There is Error : \n ```{error}```')
 
-@bot.command()
-async def on_guild_join(guild, message, ctx):
-  await ctx.send('Thanks For Invite Me') 
-    
-@bot.command()
-async def modcmd(ctx):
-    embed = discord.Embed(color=ctx.author.top_role.colour)
-    embed.add_field(name="<a:swiperight:713234344705261680> MODERATION", value="```channelmem, warn, clearwarnings, checkwarn, softban, addrole, removerole, poll, ban, clear, cl, ban, clear, clears, kick, lock, mute, roleinfo, setupmute, slowmode, stats, unlock, unmute, updates, userroles, listban, rolecolor, nick```", inline=False)
-    await ctx.send(embed=embed)
-    
-@bot.command()
-async def membercmd(ctx):
-    embed = discord.Embed(color=ctx.author.top_role.colour)
-    embed.add_field(name="<a:swiperight:713234344705261680> MEMBER", value="```afk, lmgtfy, emojify, findrole, finduser, members, channelinfo, translate, about, pp, asciify, testmemory, counting, pypi, tinyurl, ava, suggest, report, invite, 8ball, bigemoji, calculator, division, memo, characters, cointoss, counteach, github, magic, reverse, twitter, wordcount, video, avatar, setup, cat, serverinfo, updates, wiki, getHelp, googling, greet, info, membercount, minecraft, slap, image, meme, rps, supreme, drakememe```", inline=False)
-    await ctx.send(embed=embed)
-    
-    
-@bot.command()
-@commands.is_owner()
-async def devcmd(ctx):
-    embed = discord.Embed(color=ctx.author.top_role.colour)
-    embed.add_field(name="<a:swiperight:713234344705261680> OWNER BOT", value="```eval, servers, Myserver, cog```", inline=False)
-    await ctx.send(embed=embed)
-    
-@bot.command()
-async def ecocmd(ctx):
-    embed = discord.Embed(color=ctx.author.top_role.colour)
-    embed.add_field(name="<a:swiperight:713234344705261680> ECONOMY", value="```bal, work, rob, give```", inline=False)
-    await ctx.send(embed=embed)
-    
-@bot.command()
-async def infocmd(ctx):
-    embed = discord.Embed(color=ctx.author.top_role.colour)
-    embed.add_field(name="<a:swiperight:713234344705261680> INFORMATION BADGES", value="```nitroBadge, staffBadge, partnerBadge, hypeventBadge```", inline=False)
-    await ctx.send(embed=embed)
-    
-@bot.command()
-async def levelcmd(ctx):
-    embed = discord.Embed(color=ctx.author.top_role.colour)
-    embed.add_field(name="<a:swiperight:713234344705261680> LEVEL COMMAND", value="```level, leaderboard````", inline=False)
-    await ctx.send(embed=embed)
-    
-@bot.command()
-async def help(ctx):
-    embed = discord.Embed(color=ctx.author.top_role.colour)
-    embed.add_field(name="<a:swiperight:713234344705261680> MODERATION", value="```Type Py!modcmd for see, this command just for administration```", inline=False)
-    embed.add_field(name="<a:swiperight:713234344705261680> MEMBER", value="```Type Py!membercmd for see, this command can use for all members```", inline=False)
-    embed.add_field(name="<a:swiperight:713234344705261680> JUST ME", value="```Type Py!devcmd for see, this commmand just for Owner Bot!```", inline=False)
-    embed.add_field(name="<a:swiperight:713234344705261680> ECONOMY", value="```Type Py!ecocmd for see, this command for economy user!```", inline=False)
-    embed.add_field(name="<a:swiperight:713234344705261680> INFO", value="```Type Py!infocmd for see, this command for information about discord badge```", inline=False)
-    embed.add_field(name="<a:swiperight:713234344705261680> LEVEL", value="```Type Py!levelcmd for see, this command for information about your level and XP!```")
-    embed.set_thumbnail(url="https://cdn.discordapp.com/avatars/714330708365148190/0e8b28cd2c24b72bb6593998f237e133.webp?size=1024")
-    embed.set_footer(text=f"Help Command! | {datetime.datetime.now()}")
-    await ctx.send(embed=embed)
+def get_prefix(client, message):
+	with open('prefixes.json', 'r') as f:
+		prefixes = json.load(f)
 
-@bot.command(helpinfo='Looks up a sequence of numbers', aliases=['numbers', 'integers'])
+		return prefixes[str(message.guild.id)]
+
+import statcord 
+
+key = 'statcord.com-c9AeEy6Wic9clB5nIxH0'
+api = statcord.Client(bot,key)
+api.start_loop()
+
+@bot.event
+async def on_command(ctx):
+    api.command_run(ctx)
+
+@todoroki.command(helpinfo='Looks up a sequence of numbers', aliases=['numbers', 'integers'])
 async def oeis(ctx, *, number: str):
     '''
     Looks up a sequence of numbers
@@ -218,111 +150,697 @@ async def oeis(ctx, *, number: str):
     embed.set_author(name='OEIS.org', url='https://oeis.org/', icon_url='https://oeis.org/oeis_logo.png')
     embed.timestamp = datetime.datetime.utcnow()
     await ctx.send('**Search result for:** ***{}...***'.format(number), embed=embed)
+
+t = todoroki.command()
+cd = 	commands.cooldown(1, 12, commands.BucketType.user)
+owner = 552492140270452736
+
+@bot.command()
+async def bug(ctx, *, msg: str):
+	"""Got a PROB? Tell us about it...  """
+ # o = ''.join(list(msg))
+	lol = bot.get_channel(726671245621592175)
+	color = discord.Color(value=0x00ff00)
+	em = discord.Embed(color=color, title="Bug reported!")
+	em.description = f"Bug : {msg}"
+	em.set_footer(text=f"Bug sent by {ctx.message.author}")
+	await lol.send(embed=em)
+	await ctx.send(
+	    "Thanks for reporting that bug! We will send your report now!.")
+
+
+@bot.command()
+async def suggest(ctx, *, msg: str):
+	"""Got a PROB? Tell us about it...  """
+	o = ''.join(list(msg))
+	lol = bot.get_channel(726827658528161804)
+	color = discord.Color(value=0x00ff00)
+	em = discord.Embed(color=color, title="Suggestion!")
+	em.description = f"Suggest : ***{o}***\nid : ***{ctx.author.id}***"
+	em.set_footer(text=f"Suggest sent by {ctx.message.author}")
+	await lol.send(embed=em)
+	await ctx.send("Thanks for Your Suggest!.")
+
+@t   
+@cd   
+async def ping(ctx):
+  ping = client.latency
+  ping = round(ping * 1000)
+  await ctx.send("Pong! `{} ms`".format(ping))
+  ctx.bot.get_user("owner").send("`{}` menggunakan command ping sayaanggggg\nID : {}".format(ctx.author, ctx.author.id))
+  
+@todoroki.command(aliases=["copid","19"])
+@cd 
+async def covid(ctx, *args):
+  if len(args)==0:
+    cases = requests.get('https://disease.sh/v3/covid-19/all').json()["cases"]
+    today = requests.get('https://disease.sh/v3/covid-19/all').json()["todayCases"]
+    death = requests.get('https://disease.sh/v3/covid-19/all').json()["deaths"]
+    dtoday = requests.get('https://disease.sh/v3/covid-19/all').json()["todayDeaths"]
+    rec = requests.get('https://disease.sh/v3/covid-19/all').json()["recovered"]
+    trec = requests.get('https://disease.sh/v3/covid-19/all').json()["todayRecovered"]
+    act = requests.get('https://disease.sh/v3/covid-19/all').json()["active"]
+    cri = requests.get('https://disease.sh/v3/covid-19/all').json()["critical"]
+    popu = requests.get('https://disease.sh/v3/covid-19/all').json()["population"]
+    embed = discord.Embed()
+    embed.set_author(name="Covid Stats", icon_url="https://cdn.discordapp.com/attachments/721753102822277130/733695614843617350/691d9ddf630b9658d959075881715405.png")
+    embed.add_field(name='Total Cases', value=f'**```{cases} cases```**')
+    embed.add_field(name="Today Cases", value=f"**```{today}```**")
+    embed.add_field(name="Total Deaths", value=f"**```{death}```**")
+    embed.add_field(name="Deaths Today", value=f"**```{dtoday}```**")
+    embed.add_field(name="Recovered Total", value=f"**```{trec}```**")
+    embed.add_field(name="Active", value=f"**```{act}```**")
+    embed.add_field(name="Critical", value=f"**```{cri}```**")
+    embed.add_field(name="Population", value=f"**```{popu}```**")
+    embed.add_field(name="Recovered Today", value=f"**```{rec}```**")
+    embed.color = discord.Color.blue()
+    embed.set_thumbnail(url="https://cdn.discordapp.com/attachments/721753102822277130/733695614843617350/691d9ddf630b9658d959075881715405.png")
+    await ctx.send(embed=embed)
+  try:
+    cav = todo.urlify(' '.join(args))
+    ca = requests.get(f'https://disease.sh/v3/covid-19/countries/'+str(cav)).json()["cases"]
+    tca = requests.get(f'https://disease.sh/v3/covid-19/countries/'+str(cav)).json()["todayCases"]
+    de = requests.get(f'https://disease.sh/v3/covid-19/countries/'+str(cav)).json()["deaths"]
+    tre = requests.get(f'https://disease.sh/v3/covid-19/countries/'+str(cav)).json()["todayRecovered"]
+    re = requests.get(f'https://disease.sh/v3/covid-19/countries/'+str(cav)).json()["recovered"]
+    po = requests.get(f'https://disease.sh/v3/covid-19/countries/'+str(cav)).json()["population"]
+    tde = requests.get(f'https://disease.sh/v3/covid-19/countries/'+str(cav)).json()["todayDeaths"]
+    embed = discord.Embed(color = discord.Color.blue())
+    embed.add_field(name="Population ", value=f"**```{po}```**")
+    embed.add_field(name="Cases", value=f"**```{ca}```**")
+    embed.add_field(name="Today Cases", value=f"**```{tca}```**")
+    embed.add_field(name="Death", value=f"**```{de}```**")
+    embed.add_field(name="Today Death", value=f"**```{tde}```**")
+    embed.add_field(name="Today Recovered", value=f"**```{tre}```**")
+    embed.add_field(name="Recovered", value=f"**```{re}```**")
+    embed.set_thumbnail(url="https://cdn.discordapp.com/attachments/721753102822277130/733695614843617350/691d9ddf630b9658d959075881715405.png")
+    await ctx.send(embed=embed)
+  except Exception:
+    await ctx.send("Cant find country on list or there is no cases on that country")
     
+@t 
+@cd 
+async def contributors(ctx):
+  await ctx.send(f"<a:ncgaes:713235013809864774> ***SPECIAL THANKS***\n**```{bot.get_user(661200758510977084).name}#{bot.get_user(661200758510977084).discriminator} | {bot.get_user(271576733168173057).name}#{bot.get_user(271576733168173057).discriminator} | {bot.get_user(493768058012172288).name}#{bot.get_user(493768058012172288).discriminator} | {bot.get_user(524969551419670559).name}#{bot.get_user(524969551419670559).discriminator}```**")
+  
+@todoroki.command(aliases=["jpgif"])
+@commands.cooldown(1, 12, commands.BucketType.user)
+async def jpegify(ctx):
+  if len(ctx.message.mentions)==0:
+    gola = 'https://api.alexflipnote.dev/filter/jpegify?image='+str(ctx.author.avatar_url).replace('.webp', '.png')
+    await ctx.send(file=discord.File(Painter.urltoimage(gola), 'jpegify.png'))
+  if len(ctx.message.mentions)==1:
+    go = 'https://api.alexflipnote.dev/filter/jpegify?image='+str(ctx.message.mentions[0].avatar_url).replace('.webp', '.png')
+    await ctx.send(file=discord.File(Painter.urltoimage(go), 'jpegify.png'))
+ 
+@todoroki.command(aliases=["snw"])
+@commands.cooldown(1, 12, commands.BucketType.user)
+async def snow(ctx):
+  if len(ctx.message.mentions)==0:
+    gola = 'https://api.alexflipnote.dev/filter/snow?image='+str(ctx.author.avatar_url).replace('.webp', '.png')
+    await ctx.send(file=discord.File(Painter.urltoimage(gola), 'snow.png'))
+  if len(ctx.message.mentions)==1:
+    go = 'https://api.alexflipnote.dev/filter/snow?image='+str(ctx.message.mentions[0].avatar_url).replace('.webp', '.png')
+    await ctx.send(file=discord.File(Painter.urltoimage(go), 'snow.png'))
+ 
+@todoroki.command(aliases=["bisex"])
+@commands.cooldown(1, 12, commands.BucketType.user)
+async def gay(ctx):
+  if len(ctx.message.mentions)==0:
+    gola = 'https://api.alexflipnote.dev/filter/gay?image='+str(ctx.author.avatar_url).replace('.webp', '.png')
+    await ctx.send(file=discord.File(Painter.urltoimage(gola), 'gay.png'))
+  if len(ctx.message.mentions)==1:
+    go = 'https://api.alexflipnote.dev/filter/gay?image='+str(ctx.message.mentions[0].avatar_url).replace('.webp', '.png')
+    await ctx.send(file=discord.File(Painter.urltoimage(go), 'gay.png'))
+ 
+@todoroki.command(aliases=["cmnst"])
+@commands.cooldown(1, 12, commands.BucketType.user)
+async def communist(ctx):
+  if len(ctx.message.mentions)==0:
+    gola = 'https://api.alexflipnote.dev/filter/communist?image='+str(ctx.author.avatar_url).replace('.webp', '.png')
+    await ctx.send(file=discord.File(Painter.urltoimage(gola), 'idontlikethis.png'))
+  if len(ctx.message.mentions)==1:
+    go = 'https://api.alexflipnote.dev/filter/communist?image='+str(ctx.message.mentions[0].avatar_url).replace('.webp', '.png')
+    await ctx.send(file=discord.File(Painter.urltoimage(go), 'idonlikethis.png'))
+ 
+@t 
+@cd 
+async def fml(ctx):
+  aq = requests.get('https://api.alexflipnote.dev/fml').json()["text"]
+  await ctx.send(aq)
+
+@todoroki.command(aliases=["plt"])
+@commands.cooldown(1, 12, commands.BucketType.user)
+async def pixelate(ctx):
+  if len(ctx.message.mentions)==0:
+    gola = 'https://api.alexflipnote.dev/filter/pixelate?image='+str(ctx.author.avatar_url).replace('.webp', '.png')
+    await ctx.send(file=discord.File(Painter.urltoimage(gola), 'pixelalex.png'))
+  if len(ctx.message.mentions)==1:
+    go = 'https://api.alexflipnote.dev/filter/pixelate?image='+str(ctx.message.mentions[0].avatar_url).replace('.webp', '.png')
+    await ctx.send(file=discord.File(Painter.urltoimage(go), 'pixelalex.png'))
+ 
+
+@todoroki.command(aliases=["bdanw"])
+@commands.cooldown(1, 12, commands.BucketType.user)
+async def bw(ctx):
+  if len(ctx.message.mentions)==0:
+    gola = 'https://api.alexflipnote.dev/filter/b&w?image='+str(ctx.author.avatar_url).replace('.webp', '.png')
+    await ctx.send(file=discord.File(Painter.urltoimage(gola), 'bw.png'))
+  if len(ctx.message.mentions)==1:
+    go = 'https://api.alexflipnote.dev/filter/b&w?image='+str(ctx.message.mentions[0].avatar_url).replace('.webp', '.png')
+    await ctx.send(file=discord.File(Painter.urltoimage(go), 'bw.png'))
+ 
+@todoroki.command(aliases=["blr"])
+@commands.cooldown(1, 12, commands.BucketType.user)
+async def blur(ctx):
+  if len(ctx.message.mentions)==0:
+    gola = 'https://api.alexflipnote.dev/filter/blur?image='+str(ctx.author.avatar_url).replace('.webp', '.png')
+    await ctx.send(file=discord.File(Painter.urltoimage(gola), 'blur.png'))
+  if len(ctx.message.mentions)==1:
+    go = 'https://api.alexflipnote.dev/filter/blur?image='+str(ctx.message.mentions[0].avatar_url).replace('.webp', '.png')
+    await ctx.send(file=discord.File(Painter.urltoimage(go), 'blur.png'))
+    
+@t 
+@cd
+async def invert(ctx):
+  if len(ctx.message.mentions)==0:
+    gola5 = 'https://nezumiyuiz.glitch.me/api/invert?image='+str(ctx.author.avatar_url).replace('.webp', '.png')
+    await ctx.send(file=discord.File(Painter.urltoimage(gola5), 'bangepguigans.png'))
+  else:
+    s = 'https://nezumiyuiz.glitch.me/api/invert?image='+str(ctx.message.mentions[0].avatar_url).replace('.webp', '.png')
+    await ctx.send(file=discord.File(Painter.urltoimage(s), 'bangpeguigans.png'))
+  
+@t 
+@cd 
+async def servercard(ctx):
+  sc = f'https://discord.com/api/guilds/{ctx.guild.id}/embed.png?style=banner4'
+  await ctx.send(file=discord.File(Painter.urltoimage(sc), 'servercard.png'))
+
+@t 
+@cd
+async def goat(ctx):
+  await ctx.send(file=discord.File(Painter.urltoimage('https://placegoat.com/'+str(random.randint(500, 700))), 'goat.png'))
+
+@t 
+@cd 
+async def snake(ctx):
+  await ctx.send(file=discord.File(Painter.urltoimage('https://fur.im/snek/i/'+str(random.randint(1, 874))+'.png'), 'snek.png'))
+
+@t 
+@cd 
+async def food(ctx):
+  if len(list(args))==0:
+      data = todo.jsonisp('https://nekobot.xyz/api/image?type='+str(ctx.message.content[1:]))
+      link = data['message'].replace('\/', '/')
+      if 'food' in ctx.message.content:
+          col = int(data['color'])
+      elif 'coffee' in ctx.message.content:
+          col, num = int(data['color']), random.randint(0, 1)
+          if num==0: link = todo.jsonisp('https://coffee.alexflipnote.dev/random.json')['file']
+          else: link = todo.jsonisp('https://nekobot.xyz/api/image?type=coffee')['message'].replace('\/', '/')
+      async with ctx.message.channel.typing():
+          data = Painter.urltoimage(link.replace('\/', '/'))
+          await ctx.send(file=discord.File(data, ctx.message.content[1:]+'.png'))
+
+@t 
+@cd 
+async def iotd(ctx):
+  data = todo.jsonisp('https://www.bing.com/HPImageArchive.aspx?format=js&idx=0&n=1&mkt=en-US')['images'][0]
+  embed = discord.Embed( title=data['copyright'], url=data['copyrightlink'], color=discord.Color.from_rgb(201, 160, 112))
+  embed.set_image(url='https://bing.com'+data['url'])
+  await ctx.send(embed=embed)
+
+@t 
+@cd
+async def trash(ctx):
+  if len(ctx.message.mentions)==0: await ctx.send('Please mention someone!')
+  else:
+      async with ctx.message.channel.typing():
+          av = ctx.message.author.avatar_url
+          toTrash = ctx.message.mentions[0].avatar_url
+          url='https://api.alexflipnote.dev/trash?face='+str(av).replace('webp', 'png')+'&trash='+str(toTrash).replace('webp', 'png')
+          data = Painter.urltoimage(url)
+          await ctx.send(file=discord.File(data, 'trash.png'))
+@t 
+@cd 
+async def textimg(ctx, *args):
+  if len(args)==0:
+    await ctx.send("Input the text!")
+  if len(' '.join(list(args)))>50:
+    await ctx.send("The word is limit")
+  else:
+    async with ctx.message.channel.typing():
+      txt = todo.urlify(' '.join(args))
+      data = Painter.urltoimage('https://useless-api--vierofernando.repl.co/texttoimage?text='+str(txt))
+      await ctx.send(file=discord.File(data, 'viero.png'))
+
+
+@t 
+@cd 
+async def captchatxt(ctx, *args):
+  async with ctx.message.channel.typing():
+      capt = todo.urlify(' '.join(args))
+     
+      data = Painter.urltoimage('https://api.alexflipnote.dev/captcha?text='+str(capt))
+      await ctx.send(file=discord.File(data, 'captcha.png'))
+
+@t
+@cd
+async def numbereact(ctx):
+  if len(list(args))==0: await ctx.send("Please give a valid argument! If still error, please contact owner")
+  else:
+      num = []
+      for i in list(args):
+          if i.isnumeric(): num.append(int(i))
+      if len(num)!=2: await ctx.send('Oops! Not a valid arg!')
+      elif num[1] or num[0] not in list(range(0, 10)):
+          await ctx.send('The valid range is from 0 to 9!')
+      else:
+          if num[1] > num[0]: num = num[::-1]
+          for i in range(num[0], num[1]):
+              await ctx.message.add_reaction(num2word(i))
+
+@t
+@cd
+async def serverinvite(ctx):
+  if not ctx.message.author.guild_permissions.create_instant_invite:
+     await ctx.send(':x: Sorry u dont have perms')
+  else:
+     serverinvite = await ctx.message.channel.create_invite(reason='Requested by '+str(ctx.message.author.name))
+     await ctx.send('<a:load:713196760264212570> Succes! Link: **'+str(serverinvite)+'**')
+
+@todoroki.command(aliases=["disg"])
+@commands.cooldown(1, 8, commands.BucketType.user)
+async def disgusting(ctx):
+  if len(ctx.message.mentions)==0:
+    gola = 'https://useless-api--vierofernando.repl.co/disgusting?image='+str(ctx.author.avatar_url).replace('.webp', '.png')
+    await ctx.send(file=discord.File(Painter.urltoimage(gola), 'vierofernando.png'))
+  if len(ctx.message.mentions)==1:
+    go = 'https://useless-api--vierofernando.repl.co/disgusting?image='+str(ctx.message.mentions[0].avatar_url).replace('.webp', '.png')
+    await ctx.send(file=discord.File(Painter.urltoimage(go), 'vierofernando.png'))
+
+@todoroki.command()
+async def duck(ctx):
+  await ctx.send(file=discord.File(Painter.urltoimage(todo.jsonisp('https://random-d.uk/api/v2/random?format=json')['url']), 'duck.png'))
+
+@todoroki.command(aliases=["ftv"])
+@commands.cooldown(1, 8, commands.BucketType.user)
+async def ferbtv(ctx):
+  if len(ctx.message.mentions)==0:
+    gy = 'https://useless-api--vierofernando.repl.co/ferbtv?image='+str(ctx.author.avatar_url).replace('.webp', '.png')
+    await ctx.send(file=discord.File(Painter.urltoimage(gy), 'vierofernando.png'))
+  else:
+    bbi = 'https://useless-api--vierofernando.repl.co/ferbtv?image='+str(ctx.message.mentions[0].avatar_url).replace('.webp', '.png')
+    await ctx.send(file=discord.File(Painter.urltoimage(bbi), 'vierofernando.png'))
+
+@todoroki.command(aliases=["art"])
+@commands.cooldown(1, 8, commands.BucketType.user)
+async def artmeme(ctx):
+  if len(ctx.message.mentions)==0:
+    golam = 'https://useless-api--vierofernando.repl.co/art?image='+str(ctx.author.avatar_url).replace('.webp', '.png')
+    await ctx.send(file=discord.File(Painter.urltoimage(golam), 'vierofernando.png'))
+  else:
+    uu = 'https://useless-api--vierofernando.repl.co/art?image='+str(ctx.message.mentions[0].avatar_url).replace('.webp', '.png')
+    await ctx.send(file=discord.File(Painter.urltoimage(uu), 'vierofernando.png'))
+
+
+@todoroki.command(aliases=["gray"])
+@commands.cooldown(1, 8, commands.BucketType.user)
+async def grayscale(ctx):
+  if len(ctx.message.mentions)==0:
+    golat = 'https://useless-api--vierofernando.repl.co/grayscale?image='+str(ctx.author.avatar_url).replace('.webp', '.png')
+    await ctx.send(file=discord.File(Painter.urltoimage(golat), 'vierofernando.png'))
+  else:
+    g = 'https://useless-api--vierofernando.repl.co/grayscale?image='+str(ctx.message.mentions[0].avatar_url).replace('.webp', '.png')
+    await ctx.send(file=discord.File(Painter.urltoimage(g), 'vierofernando.png'))
+
+@todoroki.command(aliases=["resp"])
+@commands.cooldown(1, 8, commands.BucketType.user)
+async def respect(ctx):
+  if len(ctx.message.mentions)==0:
+    golay = 'https://useless-api--vierofernando.repl.co/respects?image='+str(ctx.author.avatar_url).replace('.webp', '.png')
+    await ctx.send(file=discord.File(Painter.urltoimage(golay), 'vierofernando.png'))
+  else:
+    f = 'https://useless-api--vierofernando.repl.co/respects?image='+str(ctx.message.mentions[0].avatar_url).replace('.webp', '.png')
+    await ctx.send(file=discord.File(Painter.urltoimage(f), 'vierofernando.png'))
+  
+@todoroki.command()    
+@commands.cooldown(1, 5, commands.BucketType.user)
+async def sepia(ctx):
+  if len(ctx.message.mentions)==0:
+    gola5 = 'https://nezumiyuiz.glitch.me/api/sepia?image='+str(ctx.author.avatar_url).replace('.webp', '.png')
+    await ctx.send(file=discord.File(Painter.urltoimage(gola5), 'bangepguigans.png'))
+  else:
+    s = 'https://nezumiyuiz.glitch.me/api/sepia?image='+str(ctx.message.mentions[0].avatar_url).replace('.webp', '.png')
+    await ctx.send(file=discord.File(Painter.urltoimage(s), 'bangpeguigans.png'))
+  
+@todoroki.command()
+@commands.cooldown(1, 7, commands.BucketType.user)
+async def baby(ctx):
+  if len(ctx.message.mentions)==0:
+    gola1 = 'https://useless-api--vierofernando.repl.co/baby?image='+str(ctx.author.avatar_url).replace('.webp', '.png')
+    await ctx.send(file=discord.File(Painter.urltoimage(gola1), 'vierofernando.png'))
+  else:
+    b = 'https://useless-api--vierofernando.repl.co/baby?image='+str(ctx.message.mentions[0].avatar_url).replace('.webp', '.png')
+    await ctx.send(file=discord.File(Painter.urltoimage(b), 'jovangans.png'))
+  
+@todoroki.command()
+@commands.cooldown(1, 7, commands.BucketType.user)
+async def codehex(ctx, msg:str):
+  o = f"https://useless-api--vierofernando.repl.co/color?hex={msg}"
+  await ctx.send(file=discord.File(Painter.urltoimage(o), 'cieecanvas.png'))
+  
+@t 
+@cd 
+async def achiv(ctx, *args):
+  async with ctx.message.channel.typing():
+      capt = todo.urlify(' '.join(args))
+      data = Painter.urltoimage('https://api.alexflipnote.dev/achievement?text='+str(capt))
+      await ctx.send(file=discord.File(data, 'alexcantik.png'))
+      
+@todoroki.command()
+@commands.cooldown(1, 6, commands.BucketType.user)
+async def catfact(ctx):
+  cat = requests.get("https://some-random-api.ml/facts/cat").json()['fact']
+  em = discord.Embed(title="<a:boosterinbgsd:712992968990130189> Cat Fact <a:boosterinbgsd:712992968990130189>", description=f"**```{cat}```**\n-CatFact", color=discord.Color.blue())
+  await ctx.send(embed=em)
+
+@todoroki.command()
+@commands.cooldown(1, 6, commands.BucketType.user)
+async def quote(ctx):
+  quotetod = requests.get('https://quotes.herokuapp.com/libraries/math/random').text
+  em = discord.Embed(title="Quote Today", description=f"{quotetod}", color=discord.Color.blue())
+  await ctx.send(embed=em)
+
+@has_voted()
+@todoroki.command(helpinfo='Wikipedia summary', aliases=['w', 'wiki'])
+@commands.cooldown(1, 4, commands.BucketType.user)
+async def wikipedia(ctx, *, query: str):
+    '''
+    Uses Wikipedia APIs to summarise search
+    '''
+    sea = requests.get(
+        ('https://en.wikipedia.org//w/api.php?action=query'
+         '&format=json&list=search&utf8=1&srsearch={}&srlimit=5&srprop='
+        ).format(query)).json()['query']
+
+    if sea['searchinfo']['totalhits'] == 0:
+        await ctx.send('Sorry, your search could not be found.')
+    else:
+        for x in range(len(sea['search'])):
+            article = sea['search'][x]['title']
+            req = requests.get('https://en.wikipedia.org//w/api.php?action=query'
+                               '&utf8=1&redirects&format=json&prop=info|images'
+                               '&inprop=url&titles={}'.format(article)).json()['query']['pages']
+            if str(list(req)[0]) != "-1":
+                break
+        else:
+            await ctx.send('Sorry, your search could not be found.')
+            return
+        article = req[list(req)[0]]['title']
+        arturl = req[list(req)[0]]['fullurl']
+        artdesc = requests.get('https://en.wikipedia.org/api/rest_v1/page/summary/'+article).json()['extract']
+        lastedited = datetime.datetime.strptime(req[list(req)[0]]['touched'], "%Y-%m-%dT%H:%M:%SZ")
+        embed = discord.Embed(title='**'+article+'**', url=arturl, description=artdesc, color=0x3FCAFF)
+        embed.set_footer(text='Wiki entry last modified',
+                         icon_url='https://upload.wikimedia.org/wikipedia/commons/6/63/Wikipedia-logo.png')
+        embed.set_author(name='Wikipedia', url='https://en.wikipedia.org/',
+                         icon_url='https://upload.wikimedia.org/wikipedia/commons/6/63/Wikipedia-logo.png')
+        embed.timestamp = lastedited
+        await ctx.send('**Search result for:** ***"{}"***:'.format(query), embed=embed)
+
+@bot.event
+async def on_guild_join(guild):
+	lol = bot.get_channel(726676707226157076)
+	em = discord.Embed(color=discord.Color(value=0x00ff00))
+	em.title = f"Todoroki kun bot has arrived in new guids!"
+	em.description = f"<a:HatiMel:712209640750055464> Server Name : **{guild}**\n<a:HatiMel:712209640750055464> Server Count : {len(bot.guilds)} servers!"
+	await lol.send(embed=em)
+
+
+@bot.command(aliases=['topgg'])
+async def vote(ctx):
+	y = "You can vote me every 12 hours! Remember!"
+	vote = "https://top.gg/bot/714330708365148190"
+	embed = discord.Embed(
+	    title=
+	    "<a:verify10:698678441502965851> VOTE ME NOW <a:verify10:698678441502965851>"
+	)
+	embed.description = f"*{y}*\nWant vote me? Vote on here \n [Vote Me Now On Here :)]({vote})"
+	embed.timestamp = ctx.message.created_at
+	embed.color = discord.Color.blue()
+	embed.set_footer(text=f"{ctx.author.name}")
+	embed.set_thumbnail(url=bot.user.avatar_url)
+	await ctx.send(embed=embed)
+
+
+@bot.event
+async def on_guild_remove(guild):
+	lol = bot.get_channel(726827078543999099)
+	em = discord.Embed(color=discord.Color(value=0xf44242))
+	em.title = f"Todoroki Kun bot has been removed from guild"
+	em.description = f"<a:Chekbaru:712209716645724221> Server : **{guild}**\n<a:Chekbaru:712209716645724221> Server Count : {len(bot.guilds)} Servers"
+	await lol.send(embed=em)
+
+@bot.command(aliases=["urb"])
+@commands.is_nsfw()
+@commands.cooldown(1, 3, commands.BucketType.user)
+async def urban(ctx, *, arg=None):
+
+	if arg == None:
+		embederror = discord.Embed()
+		embederror.title = ":x: Invalid argument"
+		embederror.description = "**Todo.urban [search]**"
+		embederror.color = discord.Color.red()
+		return await ctx.send(embed=embederror)
+	try:
+		urban = UrbanClient()
+
+		defs = urban.get_definition(arg)
+
+		def0 = defs[0]
+
+		def1 = defs[1]
+
+		def2 = defs[2]
+
+		def3 = defs[3]
+
+		def4 = defs[4]
+
+		embeds = [
+		    discord.Embed(
+		        title=f"Urban Dictionary - {arg}",
+		        description=def0.definition,
+		        color=discord.Color.green()),
+		    discord.Embed(
+		        title=f"Urban Dictionary - {arg}",
+		        description=def1.definition,
+		        color=discord.Color.green()),
+		    discord.Embed(
+		        title=f"Urban Dictionary - {arg}",
+		        description=def2.definition,
+		        color=discord.Color.green()),
+		    discord.Embed(
+		        title=f"Urban Dictionary - {arg}",
+		        description=def3.definition,
+		        color=discord.Color.green()),
+		    discord.Embed(
+		        title=f"Urban Dictionary - {arg}",
+		        description=def4.definition,
+		        color=discord.Color.green())
+		]
+
+		paginator = BotEmbedPaginator(ctx, embeds)
+
+		await paginator.run()
+
+	except Exception:
+
+		await ctx.send(f"Can't find **{arg}** in Urban Dictionary.")
+
+@client.command(aliases=['json'])
+@commands.is_owner()
+async def json2(ctx, json3: str):
+	with open(f"{json3}.json", "r") as f:
+
+		command = json.load(f)
+
+		nicejson = pprint.pformat(command, indent=4, sort_dicts=True)
+		nicejson2 = nicejson[:-1] + "\n}"
+		nicejson3 = str(nicejson2).replace("'", '"')
+		await ctx.send(f'```json\n{nicejson3}```')
+
+@bot.command()
+@commands.is_owner()
+async def ay(ctx, *, msg: str):
+	await ctx.send(msg)
+	await ctx.message.delete()
+
+
+@bot.command()
+async def say(ctx, *, msg: str):
+	await ctx.send(msg)
+
+
+@bot.command()
+@commands.is_owner()
+async def connect(ctx, type=None):
+
+	if type == "serv":
+		ser = len(bot.guilds)
+		await ctx.send(f'Am connected to {ser} servers')
+	elif type == "user":
+		user = len(bot.users)
+		await ctx.send(f'Am connected to {user} users')
+	elif type == None:
+		embed = discord.Embed(title="CONNECTED")
+		embed.color = discord.Color.blue()
+		s = "Van connect serv"
+		u = "Van connect user"
+		embed.description = f"{s}\n{u}"
+		await ctx.send(embed=embed)
+
+
+@bot.command(aliases=['bot'])
+@commands.is_owner()
+async def reboot(ctx):
+	await ctx.send('<a:fastdance3:712218698248880158> Restarting....')
+	os.execv(sys.executable, [sys.executable] + sys.argv)
+
+
+@client.command()
+@commands.is_owner()
+async def pip(ctx, module: str):
+
+	subprocess.check_call(["python3.8", "-m", "pip", "install", module])
+	await ctx.send('Installing module, please wait...')
+	asyncio.sleep(5)
+
+	output = subprocess.getoutput(f"python3.8 -m pip install {module}")
+	await ctx.send(f"Output:\n```{output}```")
+
+@has_voted()
+@bot.command(helpinfo='Searches for YouTube videos', aliases=['yt'])
+@commands.cooldown(1, 4, commands.BucketType.user)
+async def youtube(ctx, *, query: str):
+	'''
+    Uses YouTube Data v3 API to search for videos
+    '''
+	req = requests.get((
+	    'https://www.googleapis.com/youtube/v3/search?part=id&maxResults=1'
+	    '&order=relevance&q={}&relevanceLanguage=en&safeSearch=moderate&type=video'
+	    '&videoDimension=2d&fields=items%2Fid%2FvideoId&key=').format(query) +
+	                   os.environ['YOUTUBE_API_KEY'])
+	await ctx.send('**Video URL: https://www.youtube.com/watch?v={}**'.format(
+	    req.json()['items'][0]['id']['videoId']))
+
+
+start_time = time.time()
+
+bot.launch_time = datetime.datetime.utcnow()
+
+
+@bot.command(aliases=['up', 'upt'])
+@commands.is_owner()
+async def uptime(ctx):
+	delta_uptime = datetime.datetime.utcnow() - bot.launch_time
+	hours, remainder = divmod(int(delta_uptime.total_seconds()), 3600)
+	minutes, seconds = divmod(remainder, 60)
+	days, hours = divmod(hours, 24)
+	await ctx.send(
+	    f"<a:d0n3:712988326390530090> I am online since <a:d0n3:712988326390530090> ```{days}d, {hours}h, {minutes}m, {seconds}s```"
+	)
+
+
 @bot.command(helpinfo='For when plain text just is not enough')
 async def emojify(ctx, *, text: str):
-    '''
+	'''
     Converts the alphabet and spaces into emoji
-    '''
-    author = ctx.message.author
-    emojified = '⬇ Copy and paste this: ⬇\n'
-    formatted = re.sub(r'[^A-Za-z ]+', "", text).lower()
-    if text == '':
-        await ctx.send('Remember to say what you want to convert!')
-    else:
-        for i in formatted:
-            if i == ' ':
-                emojified += '     '
-            else:
-                emojified += ':regional_indicator_{}: '.format(i)
-        if len(emojified) + 2 >= 2000:
-            await ctx.send('Your message in emojis exceeds 2000 characters!')
-        if len(emojified) <= 25:
-            await ctx.send('Your message could not be converted!')
-        else:
-            await author.send('`'+emojified+'`')
+    ''' ""
+	author = ctx.message.author
+	emojified = '⬇ Copy and paste this: ⬇\n'
+	formatted = re.sub(r'[^A-Za-z ]+', "", text).lower()
+	if text == '':
+		await ctx.send('Remember to say what you want to convert!')
+	else:
+		for i in formatted:
+			if i == ' ':
+				emojified += '     '
+			else:
+				emojified += ':regional_indicator_{}: '.format(i)
+		if len(emojified) + 2 >= 2000:
+			await ctx.send('Your message in emojis exceeds 2000 characters!')
+		if len(emojified) <= 25:
+			await ctx.send('Your message could not be converted!')
+		else:
+			await author.send('`' + emojified + '`')
 
-@bot.command(helpinfo='Shows MC account info, skin and username history', aliases=['skin', 'mc'])
+
+@bot.command(
+    helpinfo='Shows MC account info, skin and username history',
+    aliases=['skin', 'mc'])
 async def minecraft(ctx, username='Van'):
-    '''
+	'''
    Shows MC account info, skin and username history
     '''
-    uuid = requests.get('https://api.mojang.com/users/profiles/minecraft/{}'
-                        .format(username)).json()['id']
+	uuid = requests.get('https://api.mojang.com/users/profiles/minecraft/{}'.
+	                    format(username)).json()['id']
 
-    url = json.loads(base64.b64decode(requests.get(
-        'https://sessionserver.mojang.com/session/minecraft/profile/{}'
-        .format(uuid)).json()['properties'][0]['value'])
-                     .decode('utf-8'))['textures']['SKIN']['url']
-    
-    names = requests.get('https://api.mojang.com/user/profiles/{}/names'
-                        .format(uuid)).json()
-    history = "**Name History:**\n"
-    for name in reversed(names):
-        history += name['name']+"\n"
+	url = json.loads(
+	    base64.b64decode(
+	        requests.get(
+	            'https://sessionserver.mojang.com/session/minecraft/profile/{}'
+	            .format(uuid)).json()['properties'][0]['value']).decode(
+	                'utf-8'))['textures']['SKIN']['url']
 
-    await ctx.send('**Username: `{}`**\n**Skin: {}**\n**UUID: {}**'.format(username, url, uuid))
-    await ctx.send(history)
-    
-@bot.command()     
-async def slap(ctx, members: commands.Greedy[discord.Member], *, reason='no reason'):
-    slapped = ", ".join(x.name for x in members)
-    await ctx.send('{} just got slapped for {}'.format(slapped, reason))
-    
+	names = requests.get(
+	    'https://api.mojang.com/user/profiles/{}/names'.format(uuid)).json()
+	history = "**Name History:**\n"
+	for name in reversed(names):
+		history += name['name'] + "\n"
+
+	await ctx.send('**Username: `{}`**\n**Skin: {}**\n**UUID: {}**'.format(
+	    username, url, uuid))
+
+
+@bot.command()
+async def slap(ctx,
+               members: commands.Greedy[discord.Member],
+               *,
+               reason='no reason'):
+	slapped = ", ".join(x.name for x in members)
+	await ctx.send('{} just got slapped for {}'.format(slapped, reason))
+
+
 @client.command()
+@commands.cooldown(1, 10, commands.BucketType.user)
 async def image(ctx, *, word):
-    linkWord = word.replace(' ', '+')
-    url = "https://imgur.com/search/time?q=" + linkWord + "&qs=thumbs"
-    page = urllib.request.urlopen(url)
-    soup = BeautifulSoup(page.read(), "html.parser")
-    imgLinkList = soup.find_all("a", {"class": "image-list-link"})
-    print(len(imgLinkList))
-    imgLink = imgLinkList[random.randrange(0,len(imgLinkList))]
-    imgLink = imgLink.get("href")
-    # imgLink = imgContainerLink.find("img").get("src")
-    # await client.say(imgLink.replace("//i.imgur.com/","https://i.imgur.com/"))
-    await ctx.send("https://imgur.com/" + imgLink)
-    
+	linkWord = word.replace(' ', '+')
+	url = "https://imgur.com/search/time?q=" + linkWord + "&qs=thumbs"
+	page = urllib.request.urlopen(url)
+	soup = BeautifulSoup(page.read(), "html.parser")
+	imgLinkList = soup.find_all("a", {"class": "image-list-link"})
+	print(len(imgLinkList))
+	imgLink = imgLinkList[random.randrange(0, len(imgLinkList))]
+	imgLink = imgLink.get("href")
+	# imgLink = imgContainerLink.find("img").get("src")
+	# await client.say(imgLink.replace("//i.imgur.com/","https://i.imgur.com/"))
+	await ctx.send("https://imgur.com/" + imgLink)
+
+
 @client.command()
+@commands.cooldown(1, 5, commands.BucketType.user)
 async def googling(ctx, *, word):
-    definition = ""
-    linkWord = word.replace(' ', '+')
-    url = 'https://www.wordnik.com/words/' + linkWord
-    page = urllib.request.urlopen(url)
-    soup = BeautifulSoup(page.read(), "html.parser")
-    definition = soup.select_one('.active > h3:nth-child(1)').text + "\n\n" + soup.select_one(".active > ul:nth-child(2) > li:nth-child(1)").text
-    await ctx.send("**" + word + "\n\n" + definition + "**")
-
-@client.command()
-async def video(ctx, *, word):
-    linkWord = word.replace(' ', '+')
-    url = 'https://www.youtube.com/results?sp=EgIQAQ%253D%253D&search_query=' + linkWord
-    page = urllib.request.urlopen(url)
-    soup = BeautifulSoup(page.read(), "html.parser")
-    vidLink = soup.find("div", {"class": "yt-lockup yt-lockup-tile yt-lockup-video vve-check clearfix"}).get("data-context-item-id")
-    await ctx.send("https://www.youtube.com/watch?v=" + vidLink)
-    
-@client.command(aliases=['prefix', 'pv'])
-@commands.has_permissions(administrator=True)
-async def serverprefix(ctx, prefix):
-  with open('prefixes.json', 'r') as f:
-    prefixes = json.load(f)
-    
-  prefixes[str(ctx.guild.id)] = prefix
-  
-  with open('prefixes.json', 'w') as f:
-    json.dump(prefixes, f, indent=4)
-    
-  embed = discord.Embed(title='Guild command', description=f'successfully change prefix to `{prefix}`', colour=discord.Colour.green(), timestamp=datetime.utcnow())
-  embed.set_footer(text=f'Prefix update by {ctx.author}')
-  await ctx.send(embed=embed, delete_after=15)
-  await ctx.message.delete()
-
-@serverprefix.error
-async def serverprefix_error(ctx, error):
-  if isinstance(error, commands.CheckFailure):
-    embed = discord.Embed(title='Error', description=f'<a:Redtick:722006548276183071> {error}', colour=discord.Colour.red(), timestamp=datetime.utcnow())
-    await ctx.send(embed=embed)
+	definition = ""
+	linkWord = word.replace(' ', '+')
+	url = 'https://www.wordnik.com/words/' + linkWord
+	page = urllib.request.urlopen(url)
+	soup = BeautifulSoup(page.read(), "html.parser")
+	definition = soup.select_one(
+	    '.active > h3:nth-child(1)').text + "\n\n" + soup.select_one(
+	        ".active > ul:nth-child(2) > li:nth-child(1)").text
+	await ctx.send("**" + word + "\n\n" + definition + "**")
 
 
 @client.command(pass_context=True)
@@ -331,13 +849,34 @@ async def servers(ctx):
 	await ctx.send(f"I am connected to {len(bot.guilds)} servers:")
 	async for guild in bot.fetch_guilds(limit=150):
 		await ctx.send(f"`{guild.name}` | `{guild.id}`")
+
+
 @servers.error
 async def servers_error(ctx, error):
 	if isinstance(error, commands.CheckFailure):
 		await ctx.send(error)
 
+
+def insert_returns(body):
+	# insert return stmt if the last expression is a expression statement
+	if isinstance(body[-1], ast.Expr):
+		body[-1] = ast.Return(body[-1].value)
+		ast.fix_missing_locations(body[-1])
+
+# for if statements, we insert returns into the body and the orelse
+	if isinstance(body[-1], ast.If):
+		insert_returns(body[-1].body)
+		insert_returns(body[-1].orelse)
+
+
+# for with blocks, again we insert returns into the body
+	if isinstance(body[-1], ast.With):
+		insert_returns(body[-1].body)
+
+
 @bot.command(aliases=['run', 'eval', 'e'])
 @commands.is_owner()
+@commands.cooldown(1, 3, commands.BucketType.user)
 async def eval_fn(ctx, *, cmd):
 	"""Evaluates input.
     Input is interpreted as newline seperated statements.
@@ -383,426 +922,122 @@ async def eval_fn(ctx, *, cmd):
 	exec(compile(parsed, filename="<ast>", mode="exec"), env)
 
 	result = (await eval(f"{fn_name}()", env))
-	await ctx.send(f"{result}")
+	await ctx.send(f"<a:boosterinbgsd:712992968990130189> OUTPUT :\n**```{result}```**")
+
 
 @bot.command()
 @commands.is_owner()
 async def Myserver(ctx):
-    servers = []
-    for x in client.guilds:
-        Add="\n"
-        New = str(x.name)
-        Final = str(New + Add)
-        servers.append(Final)
-        One_String = " ".join(servers)
-        embed=discord.Embed(colour=discord.Colour.blue(),timestamp=datetime.datetime.now())
-        embed.set_footer(text='Thanks to xEnder#0001 for helping')
-        embed.add_field(name=f"Servers: {len(bot.guilds)}",value=One_String,inline=False)
-    await ctx.send(embed=embed)
-    
-@bot.command()
-@commands.is_owner()
-async def cog(ctx, type = None, *, name = None):
-  
-  if type == "load":
-    
-    bot.load_extension(name)
-    
-    await ctx.send(f"Loaded `{name}`.")
-    
-  elif type == "unload":
-    
-    bot.unload_extension(name)
-    
-    await ctx.send(f"Unloaded `{name}`.")
-  
-  elif type == "reload":
+	servers = []
+	for x in client.guilds:
+		Add = "\n"
+		New = str(x.name)
+		Final = str(New + Add)
+		servers.append(Final)
+		One_String = " ".join(servers)
+		embed = discord.Embed(
+		    colour=discord.Colour.blue(), timestamp=datetime.datetime.now())
+		embed.set_footer(text='Thanks to xEnder#0001 for helping')
+		embed.add_field(
+		    name=f"Servers: {len(bot.guilds)}", value=One_String, inline=False)
+	await ctx.send(embed=embed)
 
-    if name == "all":
-
-      for cog in os.listdir('cogs'):
-        if cog.endswith('.py'):
-          try:
-            cog = f"cogs.{cog.replace('.py', '')}"
-            bot.reload_extension(cog)
-            await ctx.send(f"Reloaded `{cog}`.")
-            await asyncio.sleep(1)
-      
-          except Exception as e:
-            await ctx.send(f'`{cog}` loading failed.')
-            raise e
-
-      await ctx.send("Reloaded all cogs.")
-
-    else:
-
-      bot.reload_extension(name)
-
-      await ctx.send(f"Reloaded `{name}`.")
-
-  else:
-    
-    embed = discord.Embed(title = "<a:lba:712993920350421002> Command name : Py!cog")
-    
-    embed.description = "`Py!cog load/unload <name>`\n`Py!cog reload <name / all>`"
-    
-    embed.color = discord.Color.blue()
-    
-    await ctx.send(embed=embed)
-
-@client.command()   
-@commands.has_permissions(ban_members=True)
-async def ban(ctx, member: discord.Member = None):
-  """➜  Banned Members!"""
-  await member.ban()
-  await ctx.send(f"**<a:pinWoe:715030587349663864> {member}** telah di ban")
-  
-@client.command()
-async def ping(ctx):
-	ping = client.latency
-	ping = round(ping* 1000)
-	ping1 = discord.Embed(
-	    title='Pinging in 3', color=ctx.author.top_role.colour)
-	ping2 = discord.Embed(
-	    title='Pinging in 2', color=ctx.author.top_role.colour)
-	ping3 = discord.Embed(
-	    title='Pinging in 1', color=ctx.author.top_role.colour)
-	embed = discord.Embed(
-	    title='', description='', color=ctx.author.top_role.colour)
-	embed.add_field(
-	    name=':ping_pong: Pong!',
-	    value=f'Bot Latency is {ping}ms.',
-	    inline=False)
-	pinging = await ctx.send(embed=ping1)
-	await asyncio.sleep(1)
-	await pinging.edit(embed=ping2)
-	await asyncio.sleep(1)
-	await pinging.edit(embed=ping3)
-	await asyncio.sleep(1)
-	await pinging.edit(embed=embed)
- 
 @bot.command(name='99', help='Responds with a random quote from Brooklyn 99')
 async def nine_nine(ctx):
-    brooklyn_99_quotes = [
-        'I\'m the human form of the 💯 emoji.',
-        'Bingpot!',
-        (
-            'Cool. Cool cool cool cool cool cool cool, '
-            'no doubt no doubt no doubt no doubt.'
-        ),
-    ]
+	brooklyn_99_quotes = [
+	    'I\'m the human form of the 💯 emoji.',
+	    'Bingpot!',
+	    ('Cool. Cool cool cool cool cool cool cool, '
+	     'no doubt no doubt no doubt no doubt.'),
+	]
 
-    response = random.choice(brooklyn_99_quotes)
-    await ctx.send(response)
-    
+	response = random.choice(brooklyn_99_quotes)
+	await ctx.send(response)
+
+
 @client.command()
 @commands.has_permissions(manage_roles=True)
 async def setupmute(ctx):
-  '''➜  Setup for Mute Command'''
-  role = discord.utils.get(ctx.guild.roles, name="Muted")
-  if role is not None:
-    await ctx.send("Role already created.")
-    for channel in ctx.guild.channels:
-      await channel.set_permissions(role, send_messages=False)
-  else:
-   newRole = await ctx.guild.create_role(name="Muted")
-   await ctx.send("Setup activated.")
-   for channel in ctx.guild.channels:
-      await channel.set_permissions(newRole, send_messages=False)
-   await ctx.send("Setup is complete.")
-   
-@client.command(pass_context=True)
-@commands.has_permissions(manage_roles=True)
-async def role(ctx, member: discord.Member, *, role):
-  ROLE = discord.utils.get(ctx.guild.roles, name=role)
-  channel = discord.utils.get(ctx.guild.channels, name="mod-logs-python")
-  if channel is None:
-    await ctx.send("There doesn't seem to be a channel called `mod-logs-python` in this server! Please create it and try again.")
-  else:
-    if ROLE in member.roles:
-      await member.remove_roles(ROLE)
-      await ctx.channel.send(
-		    f"Role **{role}** has been removed from {member.name}'s roles."
-		)     
-
-    else:
-      await member.add_roles(ROLE)
-      await ctx.channel.send(
-		    f"Role **{role}** has been added to {member.name}'s roles.")  
-@role.error
-async def role_error(ctx, error):
-	if isinstance(error, commands.CheckFailure):
-		await ctx.send(error)
-
-@client.command()
-@commands.has_permissions(manage_roles=True)
-async def mute(ctx, member: discord.Member = None, duration: int = None):
-  '''
-  ➜  Muted User With reason
-  '''
-  equal = 60 * duration
-  role = discord.utils.get(ctx.guild.roles,     name="Muted")
-  if role is not None:
-   if duration == None:
-    await member.add_roles(role)
-    await ctx.send(f"*{member.mention} has been muted.")
-   else:
-    await ctx.send(f"*{member.mention} has been muted for {duration} minute.*")
-    await member.add_roles(role)
-    await asyncio.sleep(equal)
-    await member.remove_roles(role)
-  else:
-      await ctx.send("Please run the setup first by using `[prefix]setupmute`.")
-@mute.error
-async def mute_error(ctx,error):
-  if isinstance(error, commands.CheckFailure):
-    await ctx.send(error)
-  
+	'''➜  Setup for Mute Command'''
+	role = discord.utils.get(ctx.guild.roles, name="Muted")
+	if role is not None:
+		await ctx.send("Role already created.")
+		for channel in ctx.guild.channels:
+			await channel.set_permissions(role, send_messages=False)
+	else:
+		newRole = await ctx.guild.create_role(name="Muted")
+		await ctx.send("Setup activated.")
+		for channel in ctx.guild.channels:
+			await channel.set_permissions(newRole, send_messages=False)
+		await ctx.send("Setup is complete.")
 
 @client.command()
 @commands.has_permissions(manage_roles=True)
 async def unmute(ctx, member: discord.Member = None):
-  '''
+	'''
   ➜  unmute who muted users
   '''
-  await member.remove_roles(discord.utils.get(ctx.guild.roles, name="Muted"))
-  await ctx.send(f"<a:ac:713181919436603435> *{member} Already To Unmuted!*.")
+	await member.remove_roles(discord.utils.get(ctx.guild.roles, name="Muted"))
+	await ctx.send(f"<a:ac:713181919436603435> *{member} Already To Unmuted!*."
+	               )
 
-@client.command(name="lock")
-@commands.has_permissions(manage_channels=True)
-async def lock(ctx, *, name = None):
-  '''
-  ➜  locked channels
-  '''
-  overwrite = discord.PermissionOverwrite()
-  overwrite.send_messages = False
-  xyz = discord.utils.get(ctx.guild.channels, name="mod-logs-python")
-  if xyz is not None:
-    if name == None:
-        role = ctx.guild.default_role
-        await xyz.send(f"Channel **{ctx.channel}** has been locked.\nMod: {ctx.author}")
-        await ctx.channel.set_permissions(role, overwrite=overwrite)
-        await ctx.send(f"**Channel has been locked.**")
-    else:
-        await xyz.send(f"Channel **{name}** has been locked.\nMod: {ctx.author}")
-        channel = discord.utils.get(ctx.guild.channels, name=name)
-        role = ctx.guild.default_role
-        await channel.set_permissions(role, overwrite=overwrite)
-        await ctx.send(f"Channel **{name}** has been locked.")
-        await channel.send("**Channel has been locked.**")
-  else:
-    await ctx.send("There doesn't seem to be a channel called `mod-logs-python` in this server. Please create it an try again.")
-@lock.error
-async def lock_error(ctx, error):
-  if isinstance(error, commands.CheckFailure):
-    await ctx.send(error)
-    
-@client.command()
-async def getHelp(ctx):
-  '''
-  ➜  Give all prefix (info)
-  '''
-  await ctx.send("<a:Betol:712209577298624565> Here My Prefix!")
-  await ctx.send("**Invite me!**")
-  await ctx.send("```https://bit.ly/2TL4e1k```")
-  await ctx.send("```My prefix is Py!```""```Thanks for using me!```""```Made by Python and Minho Newt Uwu#2144```""```Type Py!help for list command!```")
-
-@client.event
-async def on_member_join(member):
-    await member.create_dm()
-    await member.dm_channel.send(
-        f'<a:sngbgsd:712993968924655686> WELCOME **{member.name}**! ```Hi, welcome to My Guild and My Nice Server! We all happy when u joinned! Please read announcement and Keep enjoy!```'
-    )
-    
-@client.command(name="unlock")
-@commands.has_permissions(manage_channels=True)
-async def unlock(ctx, *, name = None):
-  '''
-  ➜  Unlocked channels
-  '''
-  overwrite = discord.PermissionOverwrite()
-  overwrite.send_messages = True
-  overwrite.read_messages = True
-  overwrite.attach_files = False
-  role = ctx.guild.default_role
-  xyz = discord.utils.get(ctx.guild.channels, name="mod-logs-python")
-  if xyz is not None:
-    if name == None:
-      await xyz.send(f"Channel **{ctx.channel}** has been unlocked.\nMod: {ctx.author}")
-      await ctx.channel.set_permissions(role, overwrite=overwrite)
-      await ctx.send("**Channel has been unlocked.**")
-    else:
-      channel = discord.utils.get(ctx.guild.channels, name=name)
-      await xyz.send(f"Channel **{name}** has been unlocked.\nMod: {ctx.author}")
-      await channel.set_permissions(role, overwrite=overwrite)
-      await channel.send("**Channel has been unlocked.**")
-      await ctx.send(f"Channel **{name}** has been unlocked.")
-  else:
-    await ctx.send("There doesn't seems to be a channel called `mod-logs-python`mod-logs-python`` in this server. Please create it and try again.")
-@unlock.error
-async def unlock_error(ctx, error):
-  if isinstance(error, commands.CheckFailure):
-    await ctx.send(error)
-   
 @client.command()
 @commands.has_permissions(manage_channels=True)
 async def slowmode(ctx, amount: int):
-  """➜  Slowmode feature"""
-  await ctx.channel.edit(slowmode_delay=amount)
-  await ctx.send(f"**Set the slowmode of this channel to {amount} seconds <a:d0n3:712988326390530090>**")		
+	"""➜  Slowmode feature"""
+	await ctx.channel.edit(slowmode_delay=amount)
+	await ctx.send(
+	    f"**Set the slowmode of this channel to {amount} seconds <a:d0n3:712988326390530090>**"
+	)
 
-    
-@bot.command(name='kick', help='➜  For getting rid of annoyances')
-async def kick(ctx, usr: discord.Member, *, rsn=''):
-    try:
-        if ctx.author.guild_permissions.kick_members:
-            await usr.kick
-            await ctx.send('That fool just got kicked from my swamp!')
-            await ctx.send(file=discord.File('WhatAreYouDoingInMySwamp.gif'))
-        else:
-            await ctx.send('Sorry, you do not have permissions to do that!')
-    except discord.errors.Forbidden:
-        await ctx.send('Sorry, but I do not have permission to kick.')
-        
+
 @client.command()
 async def userroles(ctx, member: discord.Member = None):
-  '''
+	'''
   ➜  Give info about u roles
   '''
-  if member == None:
-    member = ctx.author     
-    roles = [role for role in member.roles]
+	if member == None:
+		member = ctx.author
+		roles = [role for role in member.roles]
 
-    embed = discord.Embed(title=f"{member.name}'s roles")
-    embed.set_thumbnail(url=member.avatar_url)
-    embed.add_field(name=f"Roles ({len(roles)})", value=" ".join([role.mention for role in roles]))
-    await ctx.send(embed=embed)
-  else:
-    roles = [role for role in member.roles]
+		embed = discord.Embed(title=f"{member.name}'s roles")
+		embed.set_thumbnail(url=member.avatar_url)
+		embed.add_field(
+		    name=f"Roles ({len(roles)})",
+		    value=" ".join([role.mention for role in roles]))
+		await ctx.send(embed=embed)
+	else:
+		roles = [role for role in member.roles]
 
-    embed = discord.Embed(title=f"{member.name}'s roles")
-    embed.set_thumbnail(url=member.avatar_url)
-    embed.add_field(name=f"Roles ({len(roles)})", value=" ".join([role.mention for role in roles]))
-    await ctx.send(embed=embed)
-    
+		embed = discord.Embed(title=f"{member.name}'s roles")
+		embed.set_thumbnail(url=member.avatar_url)
+		embed.add_field(
+		    name=f"Roles ({len(roles)})",
+		    value=" ".join([role.mention for role in roles]))
+		await ctx.send(embed=embed)
+
+
 @bot.command(pass_context=True)
-async def roleinfo(ctx, *,role: discord.Role = None):
-    """➜  Info about a role"""
-    if role == None:
-        await ctx.send(":x: | Role not found")
-    else:
-        colour = ''.join([random.choice('0123456789ABCDEF') for x in range(6)])
-        colour = int(colour, 16)
-        embed = discord.Embed(colour = discord.Colour(value = colour), timestamp = datetime.datetime.utcnow())
-        embed.add_field(name = "Role Name", value = format(role.name))
-        embed.add_field(name = "Role ID", value = format(role.id))
-        embed.add_field(name = "For Guild", value = format(role.guild))
-        embed.add_field(name = "Hoist", value = format(role.hoist))
-        embed.add_field(name = "Role Position", value = format(role.position))
-        embed.add_field(name = "Mentionable Role", value = format(role.mentionable))
-        embed.add_field(name = "Role Created At", value = format(role.created_at))
-        await ctx.send(embed = embed)
+async def roleinfo(ctx, *, role: discord.Role = None):
+	"""➜  Info about a role"""
+	if role == None:
+		await ctx.send(":x: | Role not found")
+	else:
+		colour = ''.join([random.choice('0123456789ABCDEF') for x in range(6)])
+		colour = int(colour, 16)
+		embed = discord.Embed(
+		    colour=discord.Colour(value=colour),
+		    timestamp=datetime.datetime.utcnow())
+		embed.add_field(name="Role Name", value=format(role.name))
+		embed.add_field(name="Role ID", value=format(role.id))
+		embed.add_field(name="For Guild", value=format(role.guild))
+		embed.add_field(name="Hoist", value=format(role.hoist))
+		embed.add_field(name="Role Position", value=format(role.position))
+		embed.add_field(
+		    name="Mentionable Role", value=format(role.mentionable))
+		embed.add_field(name="Role Created At", value=format(role.created_at))
+		await ctx.send(embed=embed)
 
-        
-@client.command(aliases=["purge"])
-@commands.has_permissions(manage_messages=True)
-async def clear(ctx, amount: int):
-  """➜  Clear mesages with limit : 100"""
-  channel = discord.utils.get(ctx.guild.channels, name="mod-logs-python")
-  if channel is None:
-    await ctx.send("There doesn't seem to be a channel called `mod-logs-python` in this server! Please create it and try again.")
-  elif amount > 300:
-    await ctx.send("The amount is too big. Please clear below 300 message.")  
-  else:    
-    await ctx.channel.purge(limit=amount + 1)
-    embed = discord.Embed(color=ctx.author.top_role.colour, title=f':ballot_box_with_check: {ctx.author.name} deleted {amount} message')
-    em = discord.Embed(title="Cleared Message Report", color = ctx.author.colour, timestamp=ctx.message.created_at)
-    em.add_field(name=f'Mod:', value=ctx.author, inline=False)
-    em.add_field(name='Message Cleared:', value=amount, inline=False)
-    em.add_field(name='Channel:', value=ctx.channel, inline=False)
-    await channel.send(embed=em)
-    lol = await ctx.send(embed=embed)
-    await asyncio.sleep(5)
-    await lol.delete()
-
-@client.command(aliases=["purges"])
-@commands.has_permissions(manage_messages=True)
-async def clears(ctx, amount: int):
-  """➜  Clears messages with limit : 300"""
-  channel = discord.utils.get(ctx.guild.channels, name="mod-logs-python")
-  if channel is None:
-    await ctx.send("There doesn't seem to be a channel called `mod-logs-python` in this server! Please create it and try again.")
-  elif amount > 300:
-    await ctx.send("The amount is too big, please clear below 300 message.")  
-  else:
-    embed = discord.Embed(
-        title='Cleared Messages Reogs-pythont',
-        description='',
-        color=ctx.message.author.top_role.colour,
-        timestamp=ctx.message.created_at)
-    embed.add_field(name=f'Mod:', value=(author), inline=False)
-    embed.add_field(name='Messages Cleared:', value=(amount), inline=False)
-    embed.add_field(name='Channel:', value=ctx.channel, inline=False)
-    channel
-    await channel.send(embed=embed)
-    await ctx.channel.purge(limit=amount + 1)
-    embed = discord.Embed(color=ctx.author.top_role.colour, title=f':ballot_box_with_check: {ctx.author.name} deleted {amount} message')
-    lol = await ctx.send(embed=embed)
-    await asyncio.sleep(5)
-    await lol.delete()
-
-@clear.error
-async def clear_error(ctx, error):
-	if isinstance(error, commands.CheckFailure):
-		await ctx.send(error)
-
-@client.event
-async def on_member_update(before, after):
-    channel = discord.utils.get(before.guild.text_channels, name="mod-logs-python")
-    roles = [role for role in before.roles]
-    roless = [role for role in after.roles]
-
-    if before.roles != after.roles:
-          embed = discord.Embed(color=before.colour, description=f"{before} - Updated role <a:pinWoe:715030587349663864>")
-          embed.set_thumbnail(url=f"{before.avatar_url}")
-          embed.add_field(name=f"Before ( {len(before.roles)} ) :", value=" ".join([role.mention for role in roles]))
-          embed.add_field(name=f"After ( {len(after.roles)} ) :", value=" ".join([role.mention for role in roless]))
-          embed.set_footer(text=f"Made by Minho Newt UwU#2144 | {datetime.datetime.now()}")
-          await channel.send(embed=embed)
-    elif channel is None:
-        return
-    else:
-        return
-      
-@client.command()
-async def serverinfo(ctx):
-
-	embed = discord.Embed(
-	    timestamp=ctx.message.created_at, color=ctx.author.top_role.colour)
-
-	embed.set_footer(text=f"Made by Minho Newt uwu#2144") 
-	embed.add_field(name="Guild Name:", value=ctx.guild.name, inline=False)
-	embed.add_field(name="Guild ID:", value=ctx.guild.id, inline=False)
-	embed.add_field(name="Server Owner", value=ctx.guild.owner, inline=False)
-	embed.add_field(name="Owner ID", value=ctx.guild.owner_id, inline=False)
-	embed.add_field(
-	    name="Server Region", value=ctx.guild.region, inline=False)
-	embed.add_field(
-	    name="Server Verification Level",
-	    value=ctx.guild.verification_level,
-	    inline=False)
-	embed.add_field(
-	    name="Server is large?", value=ctx.guild.large, inline=False)
-	embed.add_field(
-	    name="Created at", value=ctx.guild.created_at, inline=False)
-	embed.add_field(
-	    name="Roles", value='{}'.format(len(ctx.guild.roles)), inline=False)
-	embed.add_field(
-	    name="Member Count",
-	    value=ctx.guild.member_count,
-	    inline=False)    
-	await ctx.send(embed=embed)
-	
 @client.command()
 async def userinfo(ctx, member: discord.Member = None):
 	if member == None:
@@ -880,44 +1115,9 @@ async def userinfo(ctx, member: discord.Member = None):
 		    inline=False)
 		embed.add_field(
 		    name="Top role", value=member.top_role.mention, inline=False)
-
-		embed.add_field(name="Bot?", value=member.bot)
-
-		await ctx.send(embed=embed)
-		
-@client.command(pass_context=True)
-async def updates(ctx):
-  """➜  Info about Updates The Bots"""
-  embed = discord.Embed(timestamp=ctx.message.created_at, color=discord.Colour.blue())
-  embed.set_author(name="Python Updates", icon_url="https://cdn.discordapp.com/avatars/696386680965562430/e7bb3840d9846c64520ed29c4eb565db.webp?size=1024")
-  embed.add_field(name="System", value=f"**Python Version** : {platform.python_version()}\n**Discord.py Version** : {discord.__version__}\n**Operating system** : {platform.system()}\n**CPU Usage **: {psutil.cpu_percent()}%\n**CPU Count** : {psutil.cpu_count()}\n**Hosted on** : [repl.it](https://repl.it)")
-  embed.set_footer(text="Made by Minho Newt uwuヅ#2144")
-  await ctx.send(embed=embed)
-    
-@client.command(pass_context=True, no_pm=True)
-async def avatar(ctx, member: discord.Member = None):
-	if member == None:
-		member = ctx.author
-		embed = discord.Embed(title='This Your Avatar...', colour=member.color)
-
-		embed.set_footer(
-		    text=f"Made by Minho Newt Uwuヅ#2144", icon_url=ctx.author.avatar_url)
-		embed.set_image(url=member.avatar_url)
-
-		await ctx.send(embed=embed)
-	else:
-		embed = discord.Embed(title='This Your Avatar...', colour=member.color)
-
-		embed.set_footer(
-		    text=f"Made by Minho newt uwuヅ#2144", icon_url=ctx.author.avatar_url)
-		embed.set_image(url=member.avatar_url)
-
 		await ctx.send(embed=embed)
 
-@bot.command(aliases=['yt'])
-async def youtube(ctx, *, name):
-  await ctx.send(hoversearch.search("url",f"{name}"))
-	
+
 @client.command(pass_context=True)
 @commands.is_owner()
 async def users(ctx):
@@ -931,24 +1131,25 @@ from discord.ext import commands
 
 
 def insert_returns(body):
-    # insert return stmt if the last expression is a expression statement
-    if isinstance(body[-1], ast.Expr):
-        body[-1] = ast.Return(body[-1].value)
-        ast.fix_missing_locations(body[-1])
+	# insert return stmt if the last expression is a expression statement
+	if isinstance(body[-1], ast.Expr):
+		body[-1] = ast.Return(body[-1].value)
+		ast.fix_missing_locations(body[-1])
 
-    # for if statements, we insert returns into the body and the orelse
-    if isinstance(body[-1], ast.If):
-        insert_returns(body[-1].body)
-        insert_returns(body[-1].orelse)
+	# for if statements, we insert returns into the body and the orelse
+	if isinstance(body[-1], ast.If):
+		insert_returns(body[-1].body)
+		insert_returns(body[-1].orelse)
 
-    # for with blocks, again we insert returns into the body
-    if isinstance(body[-1], ast.With):
-        insert_returns(body[-1].body)
+	# for with blocks, again we insert returns into the body
+	if isinstance(body[-1], ast.With):
+		insert_returns(body[-1].body)
 
 
 @client.command()
 async def stats(ctx):
-	embed = discord.Embed(title='Python Stats', color=ctx.author.top_role.colour)
+	embed = discord.Embed(
+	    title='Python Stats', color=ctx.author.top_role.colour)
 	embed.add_field(name='Guilds', value=f'{len(bot.guilds)}', inline=True)
 	embed.add_field(name='Users', value=f'{len(bot.users)}', inline=True)
 	embed.add_field(
@@ -960,29 +1161,29 @@ async def stats(ctx):
 	    icon_url=(ctx.message.author.avatar_url))
 	await ctx.send(embed=embed)
 
-@bot.command(help='➜ Giving greet messages')
-async def greet(ctx):
-    await ctx.send(":smiley: :wave: Hello, there!")
-
-@bot.command(help='➜ Giving cat gif')
-async def cat(ctx):
-    await ctx.send("https://media.giphy.com/media/JIX9t2j0ZTN9S/giphy.gif")
-    
 @bot.command(help='➜ Giving info about the bot')
 async def info(ctx):
-    embed = discord.Embed(title="ツ About Me ツ", description="Nicest bot there is ever.", color=0xeee657)
+	embed = discord.Embed(
+	    title="ツ About Me ツ",
+	    description="Nicest bot there is ever.",
+	    color=0xeee657)
 
-    # give info about you here
-    embed.add_field(name="Author", value="<@552492140270452736>")
+	# give info about you here
+	embed.add_field(name="Author", value="<@552492140270452736>")
 
-    # Shows the number of servers the bot is member of.
-    embed.add_field(name="Server count", value=f"{len(bot.guilds)}")
+	# Shows the number of servers the bot is member of.
+	embed.add_field(name="Server count", value=f"{len(bot.guilds)}")
 
-    # give users a link to invite thsi bot to their server
-    embed.add_field(name="Invite", value="[Invite link](<https://discord.com/api/oauth2/authorize?client_id=713971454089101332&permissions=0&scope=bot>)")
+	# give users a link to invite thsi bot to their server
+	embed.add_field(
+	    name="Invite",
+	    value=
+	    "[Invite link](<https://discord.com/api/oauth2/authorize?client_id=713971454089101332&permissions=0&scope=bot>)"
+	)
 
-    await ctx.send(embed=embed)
+	await ctx.send(embed=embed)
 
-keep_alive()  
+
+keep_alive()
 client.loop.create_task(statuschange())
-client.run('your token here')
+client.run(os.environ.get("BABI"))
