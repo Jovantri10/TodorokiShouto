@@ -11,7 +11,7 @@ from utils import has_voted
 from bs4 import BeautifulSoup
 import urllib.request
 import requests
-import re
+import re                          
 import os
 from datetime import datetime as todoroki
 from discord.utils import get
@@ -72,8 +72,7 @@ client = commands.Bot(
   command_prefix=[
         "Todo.",
         'todo.',
-        't,',
-        'ts',
+        '~>',
         "<@714330708365148190> ",
     ],
     owner_id=552492140270452736)
@@ -86,7 +85,7 @@ async def statuschange():
 		await bot.wait_until_ready(
 		)  # Makes the bot wait until it's fully ready before the stuff below are ran
 		await bot.change_presence(
-		    status=discord.Status.idle,
+		    status=discord.Status.dnd,
 		    activity=discord.Activity(
 		        type=discord.ActivityType.watching,
 		        name=f"{len(bot.guilds)} Guild's | Find bug? Todo.bug",
@@ -95,21 +94,30 @@ async def statuschange():
 		    8
 		)  # Makes it wait another 8 seconds and then it'll go back to the top on playing because we used "while" which makes it look
 		await bot.change_presence(
-		    status=discord.Status.idle,
+		    status=discord.Status.dnd,
 		    activity=discord.Activity(
 		        type=discord.ActivityType.listening,
 		        name=f"Todoroki and Deku | Todo.help",
 		        url="https://www.twitch.tv/pkidz2123"))
 		await asyncio.sleep(8)
 
-extensions = ['Cogs.vaan','Cogs.commands','Cogs.api','Cogs.utils','Cogs.ownerr','Cogs.helpo','Cogs.util','Cogs.stuff','Cogs.jishaku','Cogs.ksoft','Cogs.mod','Cogs.warn','Cogs.afk','Cogs.snipe','Cogs.images','Cogs.user','Cogs.Encoding','Cogs.misc commands','Cogs.membercount','Cogs.Members','Cogs.Owner']
+extensions = ['Cogs.vaan','Cogs.commands','Cogs.api','Cogs.utils','Cogs.ownerr','Cogs.help','Cogs.util','Cogs.stuff','Cogs.jishaku','Cogs.ksoft','Cogs.mod','Cogs.warn','Cogs.afk','Cogs.snipe','Cogs.images','Cogs.user','Cogs.Encoding','Cogs.misc commands','Cogs.membercount','Cogs.Members','Cogs.Owner']
 
 if __name__ == '__main__':
 	for extension in extensions:
 		client.load_extension(extension)
+    
+def get_prefix(bot, message):
+	with open('prefixes.json', 'r') as f:
+		prefixes = json.load(f)
+		
+		return prefixes[str(message.guild.id)]
 
 @bot.event
 async def on_ready():
+	ass = discord.Status.idle
+	print('Ready.')
+	await client.change_presence(status=ass)
 	replit.clear()
 	print(f'Logged in as {bot.user.name} - {bot.user.id}')
 	bot.remove_command('help')
@@ -132,7 +140,11 @@ api = statcord.Client(bot,key)
 api.start_loop()
 
 @bot.event
-async def on_command(ctx):
+async def on_command(ctx, *args):
+    y = bot.get_channel(713061501333798932)
+    lo = bot.get_channel(736792598458531892)
+    await lo.send(f"*```{ctx.author} | {ctx.author.id} |\nUse {ctx.command.name} Commands\n-----------------------------------------------```*")
+    await y.send(f"```| ID : {ctx.author.id}\n| GUILD : {ctx.guild.id}\n| CHANNEL : {ctx.channel.id}\n| AUTHOR : {ctx.author}```")
     api.command_run(ctx)
 
 @todoroki.command(helpinfo='Looks up a sequence of numbers', aliases=['numbers', 'integers'])
@@ -156,39 +168,52 @@ cd = 	commands.cooldown(1, 12, commands.BucketType.user)
 owner = 552492140270452736
 
 @bot.command()
+@cd
 async def bug(ctx, *, msg: str):
-	"""Got a PROB? Tell us about it...  """
- # o = ''.join(list(msg))
-	lol = bot.get_channel(726671245621592175)
-	color = discord.Color(value=0x00ff00)
-	em = discord.Embed(color=color, title="Bug reported!")
-	em.description = f"Bug : {msg}"
-	em.set_footer(text=f"Bug sent by {ctx.message.author}")
-	await lol.send(embed=em)
-	await ctx.send(
+  own = bot.get_user(552492140270452736)
+  lol = bot.get_channel(726671245621592175)
+  serverinvite = await ctx.message.channel.create_invite(reason='Requested by '+str(ctx.message.author.name))
+  color = discord.Color(value=0x00ff00)
+  em = discord.Embed(color=color, title="Bug reported!")
+  em.description = f"Bug : {msg}\nBug sent by {ctx.author}\nInvite : [Link]({serverinvite})"
+  await lol.send(embed=em)
+  await own.send(ctx.author.id)
+  await ctx.send(
 	    "Thanks for reporting that bug! We will send your report now!.")
 
-
 @bot.command()
+@cd
 async def suggest(ctx, *, msg: str):
 	"""Got a PROB? Tell us about it...  """
 	o = ''.join(list(msg))
+	invite = await ctx.message.channel.create_invite(reason='Requested by '+str(ctx.message.author.name))
 	lol = bot.get_channel(726827658528161804)
 	color = discord.Color(value=0x00ff00)
 	em = discord.Embed(color=color, title="Suggestion!")
-	em.description = f"Suggest : ***{o}***\nid : ***{ctx.author.id}***"
+	em.description = f"Suggest : ***{o}***\nID : ***{ctx.author.id}***\nServer : [Invite]({invite})"
 	em.set_footer(text=f"Suggest sent by {ctx.message.author}")
 	await lol.send(embed=em)
 	await ctx.send("Thanks for Your Suggest!.")
+
+@todoroki.command(aliases=["trg"])
+@commands.cooldown(1, 8, commands.BucketType.user)
+async def triggered(ctx):
+  if len(ctx.message.mentions)==0:
+    gola = 'https://useless-api--vierofernando.repl.co/triggered?image='+str(ctx.author.avatar_url)+'&increment=5'.replace('.webp', '.png')
+    await ctx.send(file=discord.File(Painter.urltoimage(gola), 'vierofernando.png'))
+  try:
+    go = 'https://useless-api--vierofernando.repl.co/triggered?image='+str(ctx.message.mentions[0].avatar_url)+'&increment=5'.replace('.webp', '.png')
+    await ctx.send(file=discord.File(Painter.urltoimage(go), 'vierofernando.png'))
+  except Exception as e:
+    await ctx.send(f"```404 ~> {e}```")
 
 @t   
 @cd   
 async def ping(ctx):
   ping = client.latency
   ping = round(ping * 1000)
-  await ctx.send("Pong! `{} ms`".format(ping))
-  ctx.bot.get_user("owner").send("`{}` menggunakan command ping sayaanggggg\nID : {}".format(ctx.author, ctx.author.id))
-  
+  await ctx.send("<:wipii:736786400069943398> Pong! `{} ms`".format(ping))
+
 @todoroki.command(aliases=["copid","19"])
 @cd 
 async def covid(ctx, *args):
@@ -329,12 +354,21 @@ async def invert(ctx):
   else:
     s = 'https://nezumiyuiz.glitch.me/api/invert?image='+str(ctx.message.mentions[0].avatar_url).replace('.webp', '.png')
     await ctx.send(file=discord.File(Painter.urltoimage(s), 'bangpeguigans.png'))
-  
+
 @t 
 @cd 
 async def servercard(ctx):
-  sc = f'https://discord.com/api/guilds/{ctx.guild.id}/embed.png?style=banner4'
-  await ctx.send(file=discord.File(Painter.urltoimage(sc), 'servercard.png'))
+  bots = [x for x in ctx.guild.members if x.bot]
+  human = [x for x in ctx.guild.members if not x.bot]
+  offline = [user for user in ctx.guild.members if user.status == discord.Status.offline]
+  dnd = [user for user in ctx.guild.members if user.status == discord.Status.dnd]
+  online = [user for user in ctx.guild.members if user.status == discord.Status.online]
+  idle = [user for user in ctx.guild.members if user.status == discord.Status.idle]
+  try:
+    sc = f'https://useless-api--vierofernando.repl.co/servercard?icon={ctx.guild.icon_url}&name={ctx.guild}&date=2%20minutes%20ago&author=Todoroki%20Shouto&humans={len(human)}&bots={len(bots)}&roles={len(ctx.guild.roles)}&channels={len(ctx.guild.channels)}&boosters={ctx.guild.premium_subscribers or "0"}&tier={ctx.guild.premium_tier}&online={len(online)}'
+    await ctx.send(file=discord.File(Painter.urltoimage(sc), 'servercard.png'))
+  except Exception as e:
+      await ctx.send(f"```404 ~> {e}```")
 
 @t 
 @cd
@@ -346,23 +380,7 @@ async def goat(ctx):
 async def snake(ctx):
   await ctx.send(file=discord.File(Painter.urltoimage('https://fur.im/snek/i/'+str(random.randint(1, 874))+'.png'), 'snek.png'))
 
-@t 
-@cd 
-async def food(ctx):
-  if len(list(args))==0:
-      data = todo.jsonisp('https://nekobot.xyz/api/image?type='+str(ctx.message.content[1:]))
-      link = data['message'].replace('\/', '/')
-      if 'food' in ctx.message.content:
-          col = int(data['color'])
-      elif 'coffee' in ctx.message.content:
-          col, num = int(data['color']), random.randint(0, 1)
-          if num==0: link = todo.jsonisp('https://coffee.alexflipnote.dev/random.json')['file']
-          else: link = todo.jsonisp('https://nekobot.xyz/api/image?type=coffee')['message'].replace('\/', '/')
-      async with ctx.message.channel.typing():
-          data = Painter.urltoimage(link.replace('\/', '/'))
-          await ctx.send(file=discord.File(data, ctx.message.content[1:]+'.png'))
-
-@t 
+@t
 @cd 
 async def iotd(ctx):
   data = todo.jsonisp('https://www.bing.com/HPImageArchive.aspx?format=js&idx=0&n=1&mkt=en-US')['images'][0]
@@ -399,27 +417,13 @@ async def textimg(ctx, *args):
 @cd 
 async def captchatxt(ctx, *args):
   async with ctx.message.channel.typing():
+    if len(args)==0:
+      await ctx.send("Input the Text!")
+    else:
       capt = todo.urlify(' '.join(args))
-     
       data = Painter.urltoimage('https://api.alexflipnote.dev/captcha?text='+str(capt))
       await ctx.send(file=discord.File(data, 'captcha.png'))
-
-@t
-@cd
-async def numbereact(ctx):
-  if len(list(args))==0: await ctx.send("Please give a valid argument! If still error, please contact owner")
-  else:
-      num = []
-      for i in list(args):
-          if i.isnumeric(): num.append(int(i))
-      if len(num)!=2: await ctx.send('Oops! Not a valid arg!')
-      elif num[1] or num[0] not in list(range(0, 10)):
-          await ctx.send('The valid range is from 0 to 9!')
-      else:
-          if num[1] > num[0]: num = num[::-1]
-          for i in range(num[0], num[1]):
-              await ctx.message.add_reaction(num2word(i))
-
+      
 @t
 @cd
 async def serverinvite(ctx):
@@ -503,17 +507,14 @@ async def baby(ctx):
   else:
     b = 'https://useless-api--vierofernando.repl.co/baby?image='+str(ctx.message.mentions[0].avatar_url).replace('.webp', '.png')
     await ctx.send(file=discord.File(Painter.urltoimage(b), 'jovangans.png'))
-  
-@todoroki.command()
-@commands.cooldown(1, 7, commands.BucketType.user)
-async def codehex(ctx, msg:str):
-  o = f"https://useless-api--vierofernando.repl.co/color?hex={msg}"
-  await ctx.send(file=discord.File(Painter.urltoimage(o), 'cieecanvas.png'))
-  
+
 @t 
 @cd 
 async def achiv(ctx, *args):
   async with ctx.message.channel.typing():
+    if len(args)==0:
+      await ctx.send("Input the Text!")
+    else:
       capt = todo.urlify(' '.join(args))
       data = Painter.urltoimage('https://api.alexflipnote.dev/achievement?text='+str(capt))
       await ctx.send(file=discord.File(data, 'alexcantik.png'))
@@ -571,12 +572,11 @@ async def wikipedia(ctx, *, query: str):
 
 @bot.event
 async def on_guild_join(guild):
-	lol = bot.get_channel(726676707226157076)
-	em = discord.Embed(color=discord.Color(value=0x00ff00))
-	em.title = f"Todoroki kun bot has arrived in new guids!"
-	em.description = f"<a:HatiMel:712209640750055464> Server Name : **{guild}**\n<a:HatiMel:712209640750055464> Server Count : {len(bot.guilds)} servers!"
-	await lol.send(embed=em)
-
+  lol = bot.get_channel(726676707226157076)
+  em = discord.Embed(color=discord.Color(value=0x00ff00))
+  em.title = f"Todoroki kun bot has arrived in new guids!"
+  em.description = f"<a:HatiMel:712209640750055464> Server Name : **{guild}**\n<a:HatiMel:712209640750055464> Server Count : {len(bot.guilds)} servers!"
+  await lol.send(embed=em)
 
 @bot.command(aliases=['topgg'])
 async def vote(ctx):
@@ -592,7 +592,6 @@ async def vote(ctx):
 	embed.set_footer(text=f"{ctx.author.name}")
 	embed.set_thumbnail(url=bot.user.avatar_url)
 	await ctx.send(embed=embed)
-
 
 @bot.event
 async def on_guild_remove(guild):
@@ -803,16 +802,6 @@ async def minecraft(ctx, username='Van'):
 	await ctx.send('**Username: `{}`**\n**Skin: {}**\n**UUID: {}**'.format(
 	    username, url, uuid))
 
-
-@bot.command()
-async def slap(ctx,
-               members: commands.Greedy[discord.Member],
-               *,
-               reason='no reason'):
-	slapped = ", ".join(x.name for x in members)
-	await ctx.send('{} just got slapped for {}'.format(slapped, reason))
-
-
 @client.command()
 @commands.cooldown(1, 10, commands.BucketType.user)
 async def image(ctx, *, word):
@@ -823,9 +812,9 @@ async def image(ctx, *, word):
 	imgLinkList = soup.find_all("a", {"class": "image-list-link"})
 	print(len(imgLinkList))
 	imgLink = imgLinkList[random.randrange(0, len(imgLinkList))]
-	imgLink = imgLink.get("href")
-	# imgLink = imgContainerLink.find("img").get("src")
-	# await client.say(imgLink.replace("//i.imgur.com/","https://i.imgur.com/"))
+	#imgLink = imgLink.get("href")
+  #imgLink = imgContainerLink.find("img").get("src")
+ # await client.say(imgLink.replace("//i.imgur.com/","https://i.imgur.com/"))
 	await ctx.send("https://imgur.com/" + imgLink)
 
 
