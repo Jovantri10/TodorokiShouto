@@ -22,7 +22,7 @@ from googletrans import Translator
 import datetime
 import platform
 
-bot = commands.Bot(command_prefix="d/")
+bot = commands.Bot(command_prefix="LUV")
   
 def apiresponses():
   
