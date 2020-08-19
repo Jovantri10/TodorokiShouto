@@ -4,7 +4,11 @@
 ## Invite
 > [Invite Me Here](https://discord.com/api/oauth2/authorize?client_id=714330708365148190&permissions=8&scope=bot)
 
-## Require For Building This Bot
-> discord.py (1.4.1)
+## First require for building bot in discord.py
+``` python
+import discord
+import os
+from discord.ext import commands
 
-> python (3.8)
+todo = commands.Bot(command_prefix="todo.")
+```
