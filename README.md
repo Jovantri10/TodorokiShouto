@@ -43,3 +43,10 @@ TOKEN=YOU_BOT_TOKEN
 ```
  ## Visit Me On [top.gg](https://top.gg) !
 > [Click and Click Here](https://top.gg/bot/714330708365148190)
+
+## Fork This Repo 💕
+> How to fork this repo? Just click [here!](https://github.com/Jovantri10/TodorokiShouto/fork) and fork!
+
+``` python
+© Jovantri Immanuel Gulo
+```
