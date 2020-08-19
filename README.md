@@ -41,3 +41,5 @@ todo.login(SECRET)
 ``` env
 TOKEN=YOU_BOT_TOKEN
 ```
+ ## Visit Me On [top.gg](https://top.gg) !
+> [Click and Click Here](https://top.gg/bot/714330708365148190)
