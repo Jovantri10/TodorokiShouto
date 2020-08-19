@@ -35,7 +35,7 @@ todo.login(SECRET)
 ```
 
 ## Token
-> Dont forget to put you token on `.env` file
+***Dont forget to put you token on `.env` file***
 
 > .env
 ``` env
