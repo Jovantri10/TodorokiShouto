@@ -63,7 +63,7 @@ def apiresponse():
       
   return fuck_you_too
 
-reddit = praw.Reddit(client_id='GKg9xGGzV4vM9Q', client_secret='FutzuRgQ-0-fFTlOsbbDeJPdcUg', user_agent='Eternal City Bot by u/RedPhantomIRP')
+reddit = praw.Reddit(client_id='', client_secret='', user_agent='')
 
 start_time = time.time()
 
